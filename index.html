@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0f766e">
+  <title>CartShare</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/print.css" media="print">
+</head>
+<body>
+
+  <!-- ============ VIEW 1: WELCOME / ROOM JOIN ============ -->
+  <main id="view-login" class="login-wrap">
+
+    <section class="login-hero">
+      <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
+      <div class="hero-inner">
+        <div class="hero-logo"><img src="assets/favicon.svg" width="44" height="44" alt=""> CartShare</div>
+        <h1 class="hero-title">Shop together<br>Split fairly</h1>
+        <p class="hero-sub">One shared cart for your dorm, office or trip. Everyone adds, everyone sees, nobody argues about who owes what.</p>
+        <ul class="hero-points">
+          <li><span>⚡</span> Live updates across tabs</li>
+          <li><span>🚚</span> Unlock free delivery together</li>
+          <li><span>🧾</span> Printable, audit-ready receipt</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="login-panel">
+      <div class="login-card">
+        <div class="mobile-brand d-lg-none">
+          <img src="assets/favicon.svg" width="40" height="40" alt=""> <span>CartShare</span>
+        </div>
+
+        <h2 class="h4 fw-bold mb-1">Welcome 👋</h2>
+        <p class="text-body-secondary mb-4">Join your group's room or start a new one</p>
+
+        <ul class="nav nav-pills nav-fill seg mb-4" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#tab-join" type="button" role="tab">Join a room</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-create" type="button" role="tab">Create a room</button>
+          </li>
+        </ul>
+
+        <div class="tab-content">
+          <div class="tab-pane fade show active" id="tab-join" role="tabpanel">
+            <form id="form-join" novalidate>
+              <div class="form-floating mb-3">
+                <input id="join-name" class="form-control" maxlength="30" placeholder="Your name" required autocomplete="nickname">
+                <label for="join-name">Your name</label>
+              </div>
+              <div class="form-floating mb-3">
+                <input id="join-code" class="form-control text-uppercase code-input" maxlength="6" placeholder="Room code" required autocomplete="off">
+                <label for="join-code">Room code (e.g. K7M2QX)</label>
+              </div>
+              <div class="alert alert-danger py-2 d-none" id="join-error" role="alert"></div>
+              <button class="btn btn-brand btn-lg w-100" type="submit">Join room →</button>
+            </form>
+          </div>
+
+          <div class="tab-pane fade" id="tab-create" role="tabpanel">
+            <form id="form-create" novalidate>
+              <div class="form-floating mb-3">
+                <input id="create-name" class="form-control" maxlength="30" placeholder="Your name" required autocomplete="nickname">
+                <label for="create-name">Your name</label>
+              </div>
+              <div class="row g-3 mb-3">
+                <div class="col-6">
+                  <div class="form-floating">
+                    <select id="create-currency" class="form-select">
+                      <option value="INR">₹ INR</option>
+                      <option value="USD">$ USD</option>
+                      <option value="EUR">€ EUR</option>
+                      <option value="GBP">£ GBP</option>
+                    </select>
+                    <label for="create-currency">Currency</label>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="form-floating">
+                    <input id="create-threshold" type="number" min="0" step="1" value="500" class="form-control" placeholder="Free delivery">
+                    <label for="create-threshold">Free delivery at</label>
+                  </div>
+                </div>
+              </div>
+              <div class="alert alert-danger py-2 d-none" id="create-error" role="alert"></div>
+              <button class="btn btn-brand btn-lg w-100" type="submit">Create room ✨</button>
+            </form>
+          </div>
+        </div>
+
+       
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ VIEW 2: THE SHARED ROOM ============ -->
+  <div id="view-room" class="d-none">
+    <nav class="topbar sticky-top">
+      <div class="container d-flex align-items-center justify-content-between gap-2 py-2">
+        <span class="d-flex align-items-center gap-2 brand-text">
+          <img src="assets/favicon.svg" width="32" height="32" alt=""> <span class="d-none d-sm-inline">CartShare</span>
+        </span>
+
+        <div class="d-flex align-items-center gap-2 flex-wrap justify-content-end">
+          <div class="avatar-stack" id="member-stack" aria-label="Room members"></div>
+          <button id="btn-copy" class="chip" type="button" title="Copy room code">
+            <span class="text-body-secondary">Room</span> <strong id="room-code" class="code-input"></strong> <span aria-hidden="true">⧉</span>
+          </button>
+          <button id="btn-theme" class="icon-btn" type="button" aria-label="Toggle dark mode" title="Toggle dark mode">🌙</button>
+          <button id="btn-leave" class="icon-btn danger" type="button" aria-label="Leave room" title="Leave room">⎋</button>
+        </div>
+      </div>
+    </nav>
+
+    <main class="container py-4">
+      <div class="greeting mb-4">
+        <h1 class="h3 fw-bold mb-0">Hi, <span id="me-name"></span> 👋</h1>
+        <p class="text-body-secondary mb-0">Everything you add shows up for the whole room instantly.</p>
+      </div>
+
+      <div class="row g-4">
+        <!-- Cart column -->
+        <section class="col-12 col-lg-7 col-xl-8">
+          <div class="card glass mb-4">
+            <div class="card-body p-3 p-md-4">
+              <h2 class="section-title">Add an item</h2>
+              <form id="form-add" class="row g-2" novalidate>
+                <div class="col-12 col-md-6">
+                  <label class="visually-hidden" for="item-name">Item name</label>
+                  <input id="item-name" class="form-control form-control-lg" placeholder="🛒  What do you need?" maxlength="60" required>
+                </div>
+                <div class="col-6 col-md-3">
+                  <label class="visually-hidden" for="item-price">Price</label>
+                  <input id="item-price" type="number" min="0.01" step="0.01" class="form-control form-control-lg" placeholder="Price" required>
+                </div>
+                <div class="col-3 col-md-1">
+                  <label class="visually-hidden" for="item-qty">Quantity</label>
+                  <input id="item-qty" type="number" min="1" max="99" value="1" class="form-control form-control-lg px-2 text-center" required>
+                </div>
+                <div class="col-3 col-md-2 d-grid">
+                  <button class="btn btn-brand btn-lg" type="submit">Add</button>
+                </div>
+              </form>
+              <div class="text-danger small mt-2 d-none" id="add-error" role="alert"></div>
+            </div>
+          </div>
+
+          <div class="card glass">
+            <div class="card-header d-flex justify-content-between align-items-center">
+              <h2 class="section-title mb-0">Shared cart <span class="pill" id="item-count">0</span></h2>
+              <button id="btn-clear" class="btn btn-sm btn-link text-danger text-decoration-none" type="button">Clear all</button>
+            </div>
+            <ul id="cart-list" class="list-group list-group-flush"></ul>
+          </div>
+        </section>
+
+        <!-- Sidebar -->
+        <aside class="col-12 col-lg-5 col-xl-4">
+          <div class="sidebar-sticky">
+            <div class="card total-card mb-4">
+              <div class="card-body p-4">
+                <div class="small text-uppercase opacity-75 fw-semibold">Cart total</div>
+                <div class="total" id="total">0</div>
+
+                <div class="mt-3" id="threshold-box">
+                  <div class="progress" role="progressbar" aria-label="Free delivery progress">
+                    <div class="progress-bar" id="threshold-bar" style="width:0%"></div>
+                  </div>
+                  <div class="small mt-2 fw-medium" id="threshold-text"></div>
+                </div>
+
+                <div class="input-group input-group-sm mt-3 threshold-edit">
+                  <span class="input-group-text">Free delivery at</span>
+                  <input id="threshold-input" type="number" min="0" step="1" class="form-control" aria-label="Free delivery threshold">
+                </div>
+              </div>
+            </div>
+
+            <div class="card glass mb-4">
+              <div class="card-body p-3 p-md-4">
+                <h2 class="section-title">Who owes what</h2>
+                <div class="table-responsive">
+                  <table class="table table-sm mb-0 align-middle split-table">
+                    <thead><tr><th>Member</th><th class="text-end">Added</th><th class="text-end">Equal share</th></tr></thead>
+                    <tbody id="split-body"></tbody>
+                  </table>
+                </div>
+                <div class="d-grid mt-3">
+                  <button id="btn-receipt" class="btn btn-dark btn-lg" type="button">🧾 Generate receipt</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="card glass">
+              <div class="card-header">
+                <h2 class="section-title mb-0">Live activity <span class="live-dot" title="Live"></span></h2>
+              </div>
+              <ul id="log-list" class="list-group list-group-flush log-list"></ul>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </main>
+  </div>
+
+  <!-- Receipt preview modal -->
+  <div class="modal fade" id="receipt-modal" tabindex="-1" aria-labelledby="receipt-title" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title h5" id="receipt-title">Group receipt</h2>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="receipt-preview"></div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-brand" id="btn-print">🖨 Print / Save as PDF</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Only this is visible when printing -->
+  <div id="print-area" aria-hidden="true"></div>
+
+  <div id="confetti" aria-hidden="true"></div>
+
+  <div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="toast" class="toast align-items-center text-bg-dark border-0" role="status" aria-live="polite">
+      <div class="d-flex"><div class="toast-body" id="toast-body"></div></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/receipt.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

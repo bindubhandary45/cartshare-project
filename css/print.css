@@ -1,0 +1,15 @@
+/* Print only the receipt */
+@page { size: A4; margin: 12mm; }
+
+@media print {
+  body { background: #fff !important; }
+  body > *:not(#print-area) { display: none !important; }
+  #print-area { display: block !important; }
+  .receipt { font-size: 10pt; border: 0; padding: 0; border-radius: 0; }
+  .receipt h2 { font-size: 15pt; }
+  .receipt .section-title { margin: .7rem 0 .25rem; }
+  .receipt table { margin-bottom: .6rem; }
+  .receipt th, .receipt td { padding: .15rem .3rem; }
+  .receipt tr { break-inside: avoid; }
+  .receipt .sign { margin-top: 1.6rem; break-inside: avoid; }
+}
